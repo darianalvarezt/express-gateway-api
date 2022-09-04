@@ -63,11 +63,14 @@ router.patch('/:id', async (req, res) => {
 })
 
 //Delete Gateway by ID
-router.delete('/:id', async (req, res) => {
+router.delete('/', async (req, res) => {
     try {
-        const id = req.params.id;
-        const data = await Gateway.findByIdAndDelete(id)
-        res.send(`Document with ${data.name} has been deleted..`)
+        const data = await Gateway.deleteMany({
+            _id: {
+              $in: req.body.ids
+            }
+          })
+        res.send(`Documents ${data} has been deleted..`)
     }
     catch (error) {
         res.status(400).json({ message: error.message })
